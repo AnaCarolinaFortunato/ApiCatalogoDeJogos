@@ -1,4 +1,5 @@
-﻿using ApiCatalogoDeJogos.InputModel;
+﻿using ApiCatalogoDeJogos.Exceptions;
+using ApiCatalogoDeJogos.InputModel;
 using ApiCatalogoDeJogos.Services;
 using ApiCatalogoDeJogos.ViewModel;
 using Microsoft.AspNetCore.Http;
@@ -58,10 +59,10 @@ namespace ApiCatalogoDeJogos.Controllers.V1
 
                 return Ok(jogo);
             }
-            //catch (JogoJaCadastradoException ex)
-            catch(Exception ex)
+            catch (JogoJaCadastradoException ex)
+           
             {
-                return UnprocessableEntity("Já existe um jogo com este nome para esta produtora")
+                return UnprocessableEntity("Já existe um jogo com este nome para esta produtora");
             }
 
 
@@ -69,18 +70,18 @@ namespace ApiCatalogoDeJogos.Controllers.V1
         }
 
         [HttpPut("{idJogo:guid}")]
-        public async Task<ActionResult>AtualizarJogo(Guid idJogo,[FromBody] JogoInputModel jogo)
+        public async Task<ActionResult>AtualizarJogo([FromRoute]Guid idJogo,[FromBody] JogoInputModel jogoInputModel)
 
         {
             try
             {
-                await _jogoService.Atualizar(idJogo, JogoInputModel);
+                await _jogoService.Atualizar(idJogo, jogoInputModel );
 
                 return Ok();
 
             }
-            //catch (JogoNaoCadastradoException ex)
-            catch (Exception ex)
+            catch (JogoNaoCadastradoException ex)
+            
             {
                 return NotFound("Não existe este jogo");
             }
@@ -96,10 +97,10 @@ namespace ApiCatalogoDeJogos.Controllers.V1
 
                 return Ok();
             }
-            //catch(JogoNaoCadastradoException ex)
-            catch (Exception ex)
+            catch(JogoNaoCadastradoException ex)
+            
             {
-                return NotFound("Não existe este jogo")
+                return NotFound("Não existe este jogo");
             }
         }
 
@@ -115,8 +116,8 @@ namespace ApiCatalogoDeJogos.Controllers.V1
 
             }
 
-            //catch (JogoNaoCadastradoException ex)
-            catch (Exception ex)
+            catch (JogoNaoCadastradoException ex)
+            
             {
                 return NotFound("Não existe este jogo");
             }
